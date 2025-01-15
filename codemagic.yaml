@@ -19,3 +19,12 @@ workflows:
       - build/**/outputs/**/*.aab
       - build/**/outputs/**/mapping.txt
       - flutter_drive.log
+    publishing:
+      email:
+        recipients:
+          - gourav@zimo.one
+          - arjan@zimo.one
+          - mehakdeep@zimo.one
+        notify:
+          success: true
+          failure: true
