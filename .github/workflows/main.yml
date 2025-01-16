@@ -33,7 +33,7 @@ jobs:
 
       # Step 5: Build the APK
       - name: Build APK
-        run: flutter build apk --debug
+        run: flutter build apk --release --split-per-abi
 
       # Step 6: Save the APK as an artifact
       - name: Upload APK
@@ -54,4 +54,6 @@ jobs:
           body: 'Hello,\n\nThe latest Flutter app build is attached to this email.\n\nBest regards,\nYour CI/CD Pipeline'
           to: 'mehakdeep@zimo.one'
           from: 'Your CI/CD Bot <${{ secrets.EMAIL_USER }}>'
-          attachments: build/app/outputs/flutter-apk/app-debug.apk
+          attachments: build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
+
+
