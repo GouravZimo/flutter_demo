@@ -1,0 +1,57 @@
+name: Build and Email Flutter App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the code
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Java (required for Flutter's Android builds)
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+
+      # Step 3: Set up Flutter
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+
+      # Step 4: Install Flutter dependencies
+      - name: Flutter Pub Get
+        run: flutter pub get
+
+      # Step 5: Build the APK
+      - name: Build APK
+        run: flutter build apk --debug
+
+      # Step 6: Save the APK as an artifact
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: Flutter-APK
+          path: build/app/outputs/flutter-apk/app-debug.apk
+
+      # Step 7: Send the APK via Email
+      - name: Send Email with APK
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: 'smtp.office365.com'
+          server_port: '587'
+          username: 'gourav@zimo.one'
+          password: 'Zimo@e92@'
+          subject: 'New Flutter App Build'
+          body: 'Hello,\n\nThe latest Flutter app build is attached to this email.\n\nBest regards,\nYour CI/CD Pipeline'
+          to: 'mehakdeep@zimo.one'
+          from: 'Your CI/CD Bot <${{ secrets.EMAIL_USER }}>'
+          attachments: build/app/outputs/flutter-apk/app-debug.apk
